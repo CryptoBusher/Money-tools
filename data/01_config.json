@@ -1,5 +1,11 @@
 {
   "binance_api_key": "",
   "binance_api_secret": "",
-  "binance_proxy": ""
+  "binance_proxy": "",
+  "withdraw_coin_ticker": "BUSD",
+  "withdraw_network": "BSC",
+  "withdraw_min_amount": 200,
+  "withdraw_max_amount": 300.14,
+  "withdraw_min_delay_sec": 10,
+  "withdraw_max_delay_sec": 300
 }
