@@ -13,10 +13,8 @@ from binance.spot import Spot
 from loguru import logger
 from pyfiglet import Figlet
 
-
 logger.remove()
 logger.add(stderr, format="<white>{time:HH:mm:ss}</white> | <level>{level: <8}</level> | <white>{message}</white>")
-
 
 f = Figlet(font='5lineoblique')
 print(f.renderText('Busher'))
@@ -37,12 +35,13 @@ def create_binance_client(_binance_api_key: str, _binance_api_secret: str, _prox
 
 def start_batch_withdrawal(_wallet_addresses: list, _config: dict, _client: Spot):
     for i, wallet in enumerate(_wallet_addresses):
-        amount = round(uniform(_config["withdraw_min_amount"], _config["withdraw_max_amount"]), 2)
+        amount = round(uniform(_config["withdraw_min_amount"], _config["withdraw_max_amount"]),
+                       _config["random_amount_digits"])
         logger.info(f'{wallet} - sending {amount} {_config["withdraw_coin_ticker"]}')
 
         try:
             response = _client.withdraw(coin=_config["withdraw_coin_ticker"], amount=amount, address=wallet,
-                                       network=_config["withdraw_network"])
+                                        network=_config["withdraw_network"])
             if response["id"]:
                 logger.info(f'{wallet} - sent tokens, id: {response["id"]}')
             else:
@@ -55,7 +54,7 @@ def start_batch_withdrawal(_wallet_addresses: list, _config: dict, _client: Spot
             delay = randint(_config["withdraw_min_delay_sec"], _config["withdraw_max_delay_sec"])
             logger.info(f'Sleeping {round(delay / 60, 2)} minutes')
             sleep(delay)
-
+            
 
 if __name__ == "__main__":
     with open('data/01_config.json', 'r') as f:
@@ -63,6 +62,9 @@ if __name__ == "__main__":
 
     with open(f'data/01_wallet_addresses.txt') as file:
         wallet_addresses = [line.rstrip() for line in file]
+
+    print_withdrawal_history()
+    exit()
 
     client = create_binance_client(config["binance_api_key"], config["binance_api_secret"], config["binance_proxy"])
 
