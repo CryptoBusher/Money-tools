@@ -63,9 +63,6 @@ if __name__ == "__main__":
     with open(f'data/01_wallet_addresses.txt') as file:
         wallet_addresses = [line.rstrip() for line in file]
 
-    print_withdrawal_history()
-    exit()
-
     client = create_binance_client(config["binance_api_key"], config["binance_api_secret"], config["binance_proxy"])
 
     confirm_action = input(f'Going to withdraw {config["withdraw_min_amount"]} - {config["withdraw_max_amount"]} '
