@@ -35,13 +35,13 @@ def create_binance_client(_binance_api_key: str, _binance_api_secret: str, _prox
     return _client
 
 
-def start_batch_withdrawal(_wallet_addresses: list, _config: dict):
+def start_batch_withdrawal(_wallet_addresses: list, _config: dict, _client: Spot):
     for i, wallet in enumerate(_wallet_addresses):
         amount = round(uniform(_config["withdraw_min_amount"], _config["withdraw_max_amount"]), 2)
         logger.info(f'{wallet} - sending {amount} {_config["withdraw_coin_ticker"]}')
 
         try:
-            response = client.withdraw(coin=_config["withdraw_coin_ticker"], amount=amount, address=wallet,
+            response = _client.withdraw(coin=_config["withdraw_coin_ticker"], amount=amount, address=wallet,
                                        network=_config["withdraw_network"])
             if response["id"]:
                 logger.info(f'{wallet} - sent tokens, id: {response["id"]}')
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         exit()
     elif confirm_action.lower() == 'y':
         logger.info('User confirmed operation, starting')
-        start_batch_withdrawal(wallet_addresses, config)
+        start_batch_withdrawal(wallet_addresses, config, client)
         logger.info('Finished batch withdrawal')
     else:
         logger.error('Wrong entry, quitting')
