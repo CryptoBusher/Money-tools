@@ -25,7 +25,7 @@ print('Telegram chat: @CryptoKiddiesChat\n')
 def create_binance_client(_binance_api_key: str, _binance_api_secret: str, _proxy: str = None, ) -> Spot:
     if _proxy:
         proxies = {'https': _proxy}
-        _client = Spot(key=_binance_api_key, secret=_binance_api_secret, show_header=False,
+        _client = Spot(api_key=_binance_api_key, api_secret=_binance_api_secret, show_header=False,
                        proxies=proxies)
     else:
         _client = Spot(api_key=_binance_api_key, api_secret=_binance_api_secret, show_header=False)
